@@ -17,3 +17,8 @@ spring:
     format-sql: true
     generate-ddl: true
 
+openai:
+  api:
+    url: https://api.openai-proxy.org/v1/chat/completions
+    key: sk-jVfmC9s3HLlOzUPCu6H7wPbtsM73as58PEnV1iYjCJgJvif9
+    modelType: gpt-4o
