@@ -1,6 +1,6 @@
 package com.capstone.petropolis.controller;
 
-import com.capstone.petropolis.entity.User;
+import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,28 +14,28 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    public List<User> getAllUsers(){
+    public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
     }
 
     @PostMapping("")
-    public User createUser(@RequestBody User user){
+    public UserEntity createUser(@RequestBody UserEntity user){
         return  userRepository.save(user);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id){
+    public UserEntity getUserById(@PathVariable long id){
         return userRepository.findById(id).orElse(null);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @PathVariable User user){
+    public UserEntity updateUser(@PathVariable int id, @PathVariable UserEntity user){
         user.setId(id);
         return userRepository.save(user);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id){
+    public void deleteUser(@PathVariable long id){
         userRepository.deleteById(id);
     }
 }
