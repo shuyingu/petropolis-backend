@@ -34,6 +34,6 @@ This is the backend of the project petropolis for course capstone.
 
    `mvn spring-boot:run`
 
-4. **Access the API documentation at:**
+4 **Access the API documentation at:**
 
    `http://localhost:8080/swagger-ui/index.html`
