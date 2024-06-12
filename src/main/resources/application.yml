@@ -14,7 +14,8 @@ spring:
         auto: update
       ddl-auto: update
     show-sql: true
-    format-sql: true
+    properties:
+      hibernate.format_sql: true
     generate-ddl: true
 
 openai:
