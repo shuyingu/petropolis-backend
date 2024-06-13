@@ -22,7 +22,11 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestParam Long userId) {
+        // fixme: user should be fetched from the session. This is just for testing before implementing authentication
         UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.badRequest().build();
+        }
         post.setUser(user);
         Post createdPost = postService.save(post);
         return ResponseEntity.ok(createdPost);
@@ -48,6 +52,7 @@ public class PostController {
     public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post, @RequestParam Long userId) {
         Post existingPost = postService.getPostById(id);
         if (existingPost != null) {
+            // fixme: user should be fetched from the session. This is just for testing before implementing authentication
             UserEntity user = userRepository.findById(userId).orElse(null);
             post.setUser(user);
             post.setId(id);
