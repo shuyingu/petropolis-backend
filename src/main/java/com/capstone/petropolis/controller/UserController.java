@@ -3,6 +3,7 @@ package com.capstone.petropolis.controller;
 import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +30,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserEntity updateUser(@PathVariable int id, @PathVariable UserEntity user){
+    public ResponseEntity<UserEntity> updateUser(@PathVariable long id, @RequestBody UserEntity user){
+        UserEntity existingUser = userRepository.findById(id).orElse(null);
+        if(existingUser == null){
+            return ResponseEntity.notFound().build();
+        }
         user.setId(id);
-        return userRepository.save(user);
+        UserEntity updatedUser = userRepository.save(user);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
