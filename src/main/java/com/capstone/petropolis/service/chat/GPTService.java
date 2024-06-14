@@ -55,7 +55,7 @@ public class GPTService {
     private String parseResponseContent(String responseBody) {
         JSONObject jsonResponse = new JSONObject(responseBody);
         JSONArray choices = jsonResponse.getJSONArray("choices");
-        if (choices.length() > 0) {
+        if (!choices.isEmpty()) {
             JSONObject choice = choices.getJSONObject(0);
             JSONObject message = choice.getJSONObject("message");
             return message.getString("content");
