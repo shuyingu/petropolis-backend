@@ -10,7 +10,7 @@ public class PromptTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "prompt_code", nullable = false, length = 64, columnDefinition = "VARCHAR(64) COMMENT 'prompt code, used for search'")
+    @Column(name = "prompt_code", nullable = false, length = 2048, columnDefinition = "VARCHAR(64) COMMENT 'prompt code, used for search'")
     private String prompt_code;
 
     @Column(name = "template", nullable = false, length = 64, columnDefinition = "VARCHAR(2048) COMMENT 'prompt template'")
