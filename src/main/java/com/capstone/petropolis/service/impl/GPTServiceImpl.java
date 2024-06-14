@@ -1,4 +1,4 @@
-package com.capstone.petropolis.service.chat;
+package com.capstone.petropolis.service.impl;
 
 import okhttp3.*;
 import org.json.JSONArray;
@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
+import com.capstone.petropolis.service.GPTService;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 @EnableAsync
-public class GPTService {
+public class GPTServiceImpl implements GPTService {
 
     @Value("${openai.api.key}")
     private String apiKey;
@@ -26,6 +27,7 @@ public class GPTService {
 
     private final OkHttpClient httpClient = new OkHttpClient();
 
+    @Override
     @Async
     public CompletableFuture<String> callOpenAi(String prompt) {
         RequestBody body = RequestBody.create(

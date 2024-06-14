@@ -1,15 +1,16 @@
-package com.capstone.petropolis.service.chat;
+package com.capstone.petropolis.service.impl;
 
 import com.capstone.petropolis.entity.PromptTemplate;
 import com.capstone.petropolis.repository.PromptTemplateRepository;
-import com.capstone.petropolis.service.chat.GPTService;
+import com.capstone.petropolis.service.GPTService;
+import com.capstone.petropolis.service.IntentDetectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class IntentDetectService{
+public class IntentDetectServiceImpl implements IntentDetectService{
 
     @Autowired
     private PromptTemplateRepository promptTemplateRepository;
@@ -17,6 +18,7 @@ public class IntentDetectService{
     @Autowired
     private GPTService gptService;
 
+    @Override
     public String detectIntent(List<String> historyQA, String currentQuery) {
         PromptTemplate promptTemplate = promptTemplateRepository.getTemplate("intent_detect");
 
