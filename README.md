@@ -29,6 +29,7 @@ This is the backend of the project petropolis for course capstone.
    step 4 ： MySQL initialize
 
    -> exec petropolis.user.sql create user table
+   -> exec petropolis.prompt.sql create prompt table
 
 3 **Run application:**
 
