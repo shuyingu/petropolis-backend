@@ -1,8 +1,11 @@
 package com.capstone.petropolis.repository;
 
 import com.capstone.petropolis.entity.UserEntity;
+import com.capstone.petropolis.utils.CheckUtils;
 import com.capstone.petropolis.utils.IDUtils;
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,19 +17,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @ActiveProfiles("test")
 class UserRepositoryTest {
-    @Autowired
-    private UserRepository userRepository;
-
-    private final static Gson gson = new Gson();
+    private final static Gson G = new Gson();
+    private static final Logger log = LogManager.getLogger();
 
     public static void dump(Object o) {
         if (o == null) {
             System.out.println("null");
         } else {
             System.out.println(o.getClass().getName());
-            System.out.println(gson.toJson(o));
+            System.out.println(G.toJson(o));
         }
     }
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void get() {
@@ -50,6 +54,9 @@ class UserRepositoryTest {
 
         int cut = this.userRepository.count(name, email);
         dump(cut);
+
+        log.info("cut = {}", cut);
+        log.error("cut = {}", cut);
     }
 
     @Test

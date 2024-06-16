@@ -1,11 +1,16 @@
 package com.capstone.petropolis.utils;
 
-import java.util.regex.Pattern;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.mail.internet.InternetAddress;
 
 public class CheckUtils {
 
+    private static final Logger log = LogManager.getLogger(CheckUtils.class);
+
     /**
-     * 粗粒度 验证是否是 Email
+     * 验证是否是 Email
      * @param email email 地址，格式：a@b.c
      * @return 验证成功返回 true，验证失败返回 false
      */
@@ -18,7 +23,15 @@ public class CheckUtils {
             return false;
         }
 
-        String regex = "\\w+@\\w+\\.[a-z]+(\\.[a-z]+)?";
-        return Pattern.matches(regex, email);
+        try {
+            // 严格的验证
+            InternetAddress internetAddress = new InternetAddress(email);
+            internetAddress.validate();
+            return true;
+        } catch (Exception e) {
+            // InternetAddress 验证失败
+            log.info("checkEmail_info | email is bad {}, message {}", email, e.getMessage());
+        }
+        return false;
     }
 }

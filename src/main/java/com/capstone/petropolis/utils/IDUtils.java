@@ -10,6 +10,10 @@ public class IDUtils {
         return UUID.randomUUID().toString().replace("-", "").toUpperCase();
     }
 
+    public static String getUUID() {
+        return UUID.randomUUID().toString();
+    }
+
     public static String getUpper32MD5(String source) {
         if (source == null) {
             source = "";

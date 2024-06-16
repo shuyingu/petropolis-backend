@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 /*
- * petropolis::t_user 业务 entity
+ * petropolis::t_user 业务 entity @see src/main/resources/sql/petropolis.user.sql
  */
 @Data
 @Entity
@@ -43,6 +43,7 @@ public class UserEntity implements Serializable {
     @Column(name = "create_time", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'create time'")
     private Timestamp createTime;
 
+    // 业务无感知， 不应该去使用
     @Column(name = "delete_time", nullable = false, columnDefinition = "BIGINT DEFAULT 0 COMMENT 'Soft delete timestamp'")
     private long deleteTime = 0;
 
