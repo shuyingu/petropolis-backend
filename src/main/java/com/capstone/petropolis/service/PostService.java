@@ -7,7 +7,10 @@ import java.util.List;
 public interface PostService {
 
     Post save(Post post);
+
     List<Post> getAllPosts();
+
     Post getPostById(Integer id);
+
     void deletePostById(Integer id);
 }

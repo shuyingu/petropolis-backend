@@ -32,24 +32,24 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    public List<UserEntity> getAllUsers(){
+    public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
     @PostMapping("")
-    public UserEntity createUser(@RequestBody UserEntity user){
-        return  userRepository.save(user);
+    public UserEntity createUser(@RequestBody UserEntity user) {
+        return userRepository.save(user);
     }
 
     @GetMapping("/{id}")
-    public UserEntity getUserById(@PathVariable long id){
+    public UserEntity getUserById(@PathVariable long id) {
         return userRepository.findById(id).orElse(null);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable long id, @RequestBody UserEntity user){
+    public ResponseEntity<UserEntity> updateUser(@PathVariable long id, @RequestBody UserEntity user) {
         UserEntity existingUser = userRepository.findById(id).orElse(null);
-        if(existingUser == null){
+        if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
         user.setId(id);
@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable long id){
+    public void deleteUser(@PathVariable long id) {
         userRepository.deleteById(id);
     }
 

@@ -3,7 +3,7 @@ package com.capstone.petropolis.utils;
 import com.google.gson.Gson;
 
 public class JSON {
-    private final static Gson G = new Gson();;
+    private final static Gson G = new Gson();
 
     // 对象转 json 字符串
     public static String to(Object src) {

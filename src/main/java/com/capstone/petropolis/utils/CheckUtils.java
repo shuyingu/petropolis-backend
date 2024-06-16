@@ -11,6 +11,7 @@ public class CheckUtils {
 
     /**
      * 验证是否是 Email
+     *
      * @param email email 地址，格式：a@b.c
      * @return 验证成功返回 true，验证失败返回 false
      */

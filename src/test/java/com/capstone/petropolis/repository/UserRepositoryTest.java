@@ -1,24 +1,22 @@
 package com.capstone.petropolis.repository;
 
 import com.capstone.petropolis.entity.UserEntity;
-import com.capstone.petropolis.utils.CheckUtils;
 import com.capstone.petropolis.utils.IDUtils;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
 class UserRepositoryTest {
     private final static Gson G = new Gson();
     private static final Logger log = LogManager.getLogger();
+    @Autowired
+    private UserRepository userRepository;
 
     public static void dump(Object o) {
         if (o == null) {
@@ -29,9 +27,6 @@ class UserRepositoryTest {
         }
     }
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Test
     void get() {
         // 1. 简单功能能否正常使用测试
@@ -41,7 +36,7 @@ class UserRepositoryTest {
         try {
             UserEntity user = this.userRepository.get(name, email);
             dump(user);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }

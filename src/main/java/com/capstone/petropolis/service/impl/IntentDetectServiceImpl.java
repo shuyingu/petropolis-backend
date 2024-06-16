@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IntentDetectServiceImpl implements IntentDetectService{
+public class IntentDetectServiceImpl implements IntentDetectService {
 
     @Autowired
     private PromptTemplateRepository promptTemplateRepository;

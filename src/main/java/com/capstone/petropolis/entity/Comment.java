@@ -57,12 +57,12 @@ public class Comment {
         return user;
     }
 
-    public Post getPost() {
-        return post;
-    }
-
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
     }
 
     public void setPost(Post post) {

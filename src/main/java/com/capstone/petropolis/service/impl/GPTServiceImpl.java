@@ -1,5 +1,6 @@
 package com.capstone.petropolis.service.impl;
 
+import com.capstone.petropolis.service.GPTService;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
-import com.capstone.petropolis.service.GPTService;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -16,28 +16,25 @@ import java.util.concurrent.CompletableFuture;
 @EnableAsync
 public class GPTServiceImpl implements GPTService {
 
+    private final OkHttpClient httpClient = new OkHttpClient();
     @Value("${openai.api.key}")
     private String apiKey;
-
     @Value("${openai.api.url}")
     private String apiUrl;
-
     @Value("${openai.api.modelType}")
     private String modelType;
-
-    private final OkHttpClient httpClient = new OkHttpClient();
 
     @Override
     @Async
     public CompletableFuture<String> callOpenAi(String prompt) {
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
-                "{\"model\": \"" + modelType + "\", \"messages\": [{\"role\": \"user\", \"content\": \""+prompt + "\"}]}"
+                "{\"model\": \"" + modelType + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}"
         );
 
         Request request = new Request.Builder()
                 .url(apiUrl)
-                .addHeader("Authorization", "Bearer "+apiKey)
+                .addHeader("Authorization", "Bearer " + apiKey)
                 .post(body)
                 .build();
 

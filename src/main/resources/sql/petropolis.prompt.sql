@@ -1,15 +1,35 @@
-CREATE DATABASE IF NOT EXISTS `petropolis` CHARACTER SET UTF8MB4;
+CREATE
+DATABASE IF NOT EXISTS `petropolis` CHARACTER SET UTF8MB4;
 
-USE petropolis;
+USE
+petropolis;
 
-CREATE TABLE IF NOT EXISTS `prompt_templates` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary key, prompt id',
+CREATE TABLE IF NOT EXISTS `prompt_templates`
+(
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL
+    AUTO_INCREMENT
+    PRIMARY
+    KEY
+    COMMENT
+    'Primary key, prompt id',
 
-    `template` VARCHAR(2048) NOT NULL COMMENT 'prompt template',
-    `prompt_code` VARCHAR(64)  NOT NULL COMMENT 'prompt code, used for search'
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4 COMMENT = 'prompt templates table';
+    `template`
+    VARCHAR
+(
+    2048
+) NOT NULL COMMENT 'prompt template',
+    `prompt_code` VARCHAR
+(
+    64
+) NOT NULL COMMENT 'prompt code, used for search'
+    ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4 COMMENT = 'prompt templates table';
 
-# temperately insert prompt from sql (will be replaced later)
+#
+temperately insert prompt from sql (will be replaced later)
 INSERT INTO prompt_templates (template, prompt_code)
 VALUES ('intent_detect',
         'Context:\n' ||

@@ -1,7 +1,6 @@
 package com.capstone.petropolis.repository;
 
 import com.capstone.petropolis.entity.PromptTemplate;
-import com.capstone.petropolis.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

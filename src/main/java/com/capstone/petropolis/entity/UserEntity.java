@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /*
  * petropolis::t_user 业务 entity @see src/main/resources/sql/petropolis.user.sql

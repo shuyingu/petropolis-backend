@@ -21,12 +21,13 @@ public class BizException extends Exception {
     //  200 or 0 都算成功， 一般只用 0， 默认不用 200 等
     private int code;
 
-    public long getCode() {
-        return this.code;
+    public BizException(String message) {
+        super(message);
     }
 
-    public void setCode(int a, int b, int c) {
-        this.code = (a * 10000 + b) * 100000 + c;
+    public BizException(int code, String message) {
+        super(message);
+        this.code = code;
     }
 
     public static BizException create(int a, int b, int c, String message) {
@@ -35,13 +36,12 @@ public class BizException extends Exception {
         return biz;
     }
 
-    public BizException(String message) {
-        super(message);
+    public long getCode() {
+        return this.code;
     }
 
-    public BizException(int code, String message) {
-        super(message);
-        this.code = code;
+    public void setCode(int a, int b, int c) {
+        this.code = (a * 10000 + b) * 100000 + c;
     }
 
     @Override

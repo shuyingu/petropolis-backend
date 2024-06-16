@@ -2,7 +2,7 @@ package com.capstone.petropolis.error;
 
 public class BizError {
     // 400 万能参数异常
-    public final static BizException Param = BizException.create(400, 0, 0,"argument exception");
+    public final static BizException Param = BizException.create(400, 0, 0, "argument exception");
     // 500 万能服务器内部异常
     public final static BizException Internal = BizException.create(500, 0, 0, "internal error");
 
