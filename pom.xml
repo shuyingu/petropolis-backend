@@ -95,10 +95,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- 增加对 Log4j 的依赖 -->
+        <!-- 增加对 Log4j2 的依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.2.1-jre</version>
         </dependency>
 
     </dependencies>

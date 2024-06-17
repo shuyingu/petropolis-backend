@@ -19,12 +19,14 @@ public class Response implements Serializable {
     // [必填] 默认 0 表示 success
     private long code;
 
-    public void set(Request request) {
+    public String set(Request request) {
         // trace id set
         if (request != null && StringUtils.isNotBlank(request.getTraceID())) {
             this.traceID = request.getTraceID();
-            return;
+        } else {
+            this.traceID = UUID.randomUUID().toString();
         }
-        this.traceID = UUID.randomUUID().toString();
+
+        return this.traceID;
     }
 }

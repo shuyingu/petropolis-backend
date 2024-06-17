@@ -66,33 +66,31 @@ public class UserController {
     public UserCreateResponse create(@RequestBody UserCreateRequest request) {
         StopWatch watch = new StopWatch();
         UserCreateResponse response = new UserCreateResponse();
+        String traceID = "";
 
         // 简单写写 🪀
         // 正常走注解拦截器里统一处理
         try {
             watch.start();
-
             log.info("UserCreate_start_info | request:{}", JSON.to(request));
 
-            response.set(request);
-
+            traceID = response.set(request);
             this.userService.create(request, response);
-
         } catch (Throwable r) {
             response.setMessage(r.getMessage());
 
             if (r instanceof BizException b) {
                 response.setCode(b.getCode());
-                log.warn("UserCreate_BizException_warn | b:{}", b);
+                log.warn("UserCreate_BizException_warn | traceID:{}, b:{}", traceID, b);
             } else {
                 response.setCode(BizError.Internal.getCode());
-                log.error("UserCreate_BizException_error | r:{}, stack:{}", r, ExceptionUtils.getStackTrace(r));
+                log.error("UserCreate_BizException_error | traceID:{}, r:{}, stack:{}", traceID, r, ExceptionUtils.getStackTrace(r));
             }
 
             // 正常企业代码 会在这里处理各类异常并打点
         } finally {
             watch.stop();
-            log.info("UserCreate_finish_info | elapsed:{}ms, response:{}", watch.getTotalTimeMillis(), JSON.to(response));
+            log.info("UserCreate_finish_info | traceID:{}, elapsed:{}ms, response:{}", traceID, watch.getTotalTimeMillis(), JSON.to(response));
         }
 
         return response;
@@ -102,32 +100,29 @@ public class UserController {
     public UserLoginResponse login(@RequestBody UserLoginRequest request) {
         StopWatch watch = new StopWatch();
         UserLoginResponse response = new UserLoginResponse();
+        String traceID = "";
 
         // 简单写写 🪀
         // 正常走注解拦截器里统一处理
         try {
             watch.start();
-
             log.info("UserLogin_start_info | request:{}", JSON.to(request));
 
-            response.set(request);
+            traceID = response.set(request);
             this.userService.login(request, response);
-
         } catch (Throwable r) {
-            response.setMessage(r.getMessage());
-
             response.setMessage(r.getMessage());
 
             if (r instanceof BizException b) {
                 response.setCode(b.getCode());
-                log.warn("UserLogin_BizException_warn | b:{}", b);
+                log.warn("UserLogin_BizException_warn | traceID:{}, b:{}", traceID, b);
             } else {
                 response.setCode(BizError.Internal.getCode());
-                log.error("UserLogin_BizException_error | r:{}, stack:{}", r, ExceptionUtils.getStackTrace(r));
+                log.error("UserLogin_BizException_error | traceID:{}, r:{}, stack:{}", traceID, r, ExceptionUtils.getStackTrace(r));
             }
         } finally {
             watch.stop();
-            log.info("UserLogin_finish_info | elapsed:{}ms, response:{}", watch.getTotalTimeMillis(), JSON.to(response));
+            log.info("UserLogin_finish_info | traceID:{}, elapsed:{}ms, response:{}", traceID, watch.getTotalTimeMillis(), JSON.to(response));
         }
 
         return response;

@@ -1,9 +1,13 @@
 package com.capstone.petropolis.api.user;
 
 import com.capstone.petropolis.api.Request;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serial;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class UserCreateRequest extends Request {
 
     @Serial

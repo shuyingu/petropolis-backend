@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // result null is not found
+    // 存在潜在 bug 用户名和邮箱重叠。 解决办法分类查询，这里为了怎么快速怎么来
     @Query(value = "SELECT id, password, password_salt, user_name, email_not_verified, user_email, update_time, create_time FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
     UserEntity get(String name, String email);
 
@@ -23,6 +24,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying
     @Query(value = "INSERT INTO t_user (user_name, password, password_salt, email_not_verified, user_email) VALUES (?1, ?2, ?3, ?4, UPPER(REPLACE(UUID(),\"-\",\"\")))", nativeQuery = true)
     int insert(String name, String password, String salt, String emailNotVerified);
+
+    // inset or update result == 1 is success or result == 0 is no success or Exception
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO t_user (user_name, password, password_salt, email_not_verified, user_email) VALUES (?1, ?2, ?3, ?4, ?4)", nativeQuery = true)
+    int insertFull(String name, String password, String salt, String emailNotVerified);
 
     @Transactional
     @Modifying

@@ -21,4 +21,7 @@ public class Request implements Serializable {
 
     // 基于 token 解析的用户少量信息
     private long userID;
+
+    // [推荐必填] 前端大杂烩 后端分析和识别
+    private String UA;
 }
