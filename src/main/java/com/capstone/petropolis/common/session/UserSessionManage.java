@@ -3,8 +3,6 @@ package com.capstone.petropolis.common.session;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class UserSessionManage {

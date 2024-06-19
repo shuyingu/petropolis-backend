@@ -1,7 +1,6 @@
 package com.capstone.petropolis.utils;
 
 import com.capstone.petropolis.error.BizError;
-import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class UserUtils {
@@ -42,7 +41,8 @@ public class UserUtils {
         // 要求全部 32 位大写的 MD5
         for(int i = 0; i < userPassword.length(); i++){
             char ch = userPassword.charAt(i);
-            if (ch < 'A' || ch > 'Z') {
+            if ((ch >= '0' && ch <= '9') || (ch >= 'A' &&  ch <= 'Z')) {
+            } else {
                 throw BizError.param("user password contains illegal character");
             }
         }

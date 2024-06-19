@@ -2,7 +2,7 @@ package com.capstone.petropolis.error;
 
 public class BizEnum {
     /*
-     * biz code b is { 0000 }  -> { 9999 } ，分配给每个业务模块，唯一
+     * biz code b is { 000 }  -> { 999 } ，分配给每个业务模块，唯一
      */
 
     public static BizException comment(int c, String message) {

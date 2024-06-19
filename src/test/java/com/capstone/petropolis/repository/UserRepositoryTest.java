@@ -1,5 +1,6 @@
 package com.capstone.petropolis.repository;
 
+import com.capstone.petropolis.TestHelper;
 import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.utils.IDUtils;
 import com.google.gson.Gson;
@@ -18,15 +19,6 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    public static void dump(Object o) {
-        if (o == null) {
-            System.out.println("null");
-        } else {
-            System.out.println(o.getClass().getName());
-            System.out.println(G.toJson(o));
-        }
-    }
-
     @Test
     void get() {
         // 1. 简单功能能否正常使用测试
@@ -35,7 +27,7 @@ class UserRepositoryTest {
 
         try {
             UserEntity user = this.userRepository.get(name, email);
-            dump(user);
+            TestHelper.dump(user);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
@@ -48,7 +40,7 @@ class UserRepositoryTest {
         String email = "2@outlook.com";
 
         int cut = this.userRepository.count(name, email);
-        dump(cut);
+        TestHelper.dump(cut);
 
         log.info("cut = {}", cut);
         log.error("cut = {}", cut);
@@ -65,7 +57,7 @@ class UserRepositoryTest {
 
         try {
             int result = this.userRepository.insert(name, password, salt, emailNotVerified);
-            dump(result);
+            TestHelper.dump(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
 
@@ -91,7 +83,7 @@ class UserRepositoryTest {
         String email = "2@outlook.com";
 
         int result = this.userRepository.setEmailNotVerified(id, email);
-        dump(result);
+        TestHelper.dump(result);
     }
 
     @Test
@@ -101,7 +93,7 @@ class UserRepositoryTest {
         String email = "2@outlook.com";
 
         int result = this.userRepository.bindEmail(id, email);
-        dump(result);
+        TestHelper.dump(result);
     }
 
     @Test
@@ -109,13 +101,13 @@ class UserRepositoryTest {
         long id = 1;
 
         int result = this.userRepository.unbindEmail(id);
-        dump(result);
+        TestHelper.dump(result);
     }
 
     @Test
     void delete() {
         long id = 1;
         int result = this.userRepository.delete(id);
-        dump(result);
+        TestHelper.dump(result);
     }
 }

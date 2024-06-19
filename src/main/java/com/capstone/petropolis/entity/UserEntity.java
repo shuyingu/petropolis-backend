@@ -3,6 +3,7 @@ package com.capstone.petropolis.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -16,6 +17,9 @@ import java.sql.Timestamp;
         @UniqueConstraint(name = "unique_user_email", columnNames = {"user_email", "delete_time"})
 })
 public class UserEntity implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5535267384082714508L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true, columnDefinition = "BIGINT UNSIGNED COMMENT 'Primary Key, user id'")
@@ -43,7 +47,7 @@ public class UserEntity implements Serializable {
     private Timestamp createTime;
 
     // 业务无感知， 不应该去使用
+    // Fix bug entity 中多了这个字段后，读取时候也需要加上这个字段 select column name -> select *
     @Column(name = "delete_time", nullable = false, columnDefinition = "BIGINT DEFAULT 0 COMMENT 'Soft delete timestamp'")
     private long deleteTime = 0;
-
 }

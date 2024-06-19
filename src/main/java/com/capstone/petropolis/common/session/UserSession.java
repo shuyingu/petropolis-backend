@@ -4,15 +4,12 @@ import com.capstone.petropolis.error.BizError;
 import com.capstone.petropolis.utils.JSON;
 import com.capstone.petropolis.utils.TimeUtils;
 import lombok.Data;
-import org.apache.catalina.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Base64;
 
 @Data

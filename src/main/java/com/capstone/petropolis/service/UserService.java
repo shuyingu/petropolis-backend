@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 @Service
 public class UserService {
     private static final Logger log = LogManager.getLogger();
@@ -47,7 +50,7 @@ public class UserService {
         String salt = IDUtils.getUpper32UUID();
         String passwd = UserUtils.password(request.getPassword(), salt);
 
-        // 😂我们这里，默认用户填入邮箱直接通过验证，怎么简单怎么来
+        // entity 😂我们这里，默认用户填入邮箱直接通过验证，怎么简单怎么来
         // 正常流程， 这里后续应该发送验证邮件，走验证流程
         UserEntity entity = new UserEntity();
         entity.setUserName(request.getUserName());
@@ -56,7 +59,11 @@ public class UserService {
         entity.setPasswordSalt(salt);
         entity.setEmailNotVerified(request.getUserEmail());
         entity.setUserEmail(request.getUserEmail());
+        entity.setCreateTime(new Timestamp(new Date().getTime()));
+        entity.setUpdateTime(entity.getCreateTime());
         UserEntity res = this.userRepository.save(entity);
+
+        log.debug("UserService_create_debug | entity:{}", JSON.to(entity));
 
         // 用户创建成功，开始给用户生成 token 和 session 用于后续持续会话
         String token = SessionService.put(res.getId(), request.getUserName());
@@ -79,6 +86,7 @@ public class UserService {
         // 哪怕是邮箱，也可能是用户名，后面交给业务层
     }
 
+    // 有的复杂也会额外带个参数 request context 这里怎么简单怎么来
     public void login(UserLoginRequest request, UserLoginResponse response) throws Exception {
         this.loginCheck(request);
 

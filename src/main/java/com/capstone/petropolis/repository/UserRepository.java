@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     // result null is not found
     // 存在潜在 bug 用户名和邮箱重叠。 解决办法分类查询，这里为了怎么快速怎么来
-    @Query(value = "SELECT id, password, password_salt, user_name, email_not_verified, user_email, update_time, create_time FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
+    @Query(value = "SELECT * FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
     UserEntity get(String name, String email);
 
     // result int > 1 is 已经存在重复用户 ｜ == 0 不存在重复用户
