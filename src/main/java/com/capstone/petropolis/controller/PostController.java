@@ -1,5 +1,6 @@
 package com.capstone.petropolis.controller;
 
+import com.capstone.petropolis.common.session.SessionService;
 import com.capstone.petropolis.entity.Post;
 import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.repository.UserRepository;
@@ -25,15 +26,23 @@ public class PostController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestParam Long userId) {
-        // fixme: user should be fetched from the session. This is just for testing before implementing authentication
-        UserEntity user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
+    public ResponseEntity<Post> createPost(@RequestBody Post post,
+                                           @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
             return ResponseEntity.badRequest().build();
         }
-        post.setUser(user);
-        Post createdPost = postService.save(post);
-        return ResponseEntity.ok(createdPost);
+        try {
+            long userId = SessionService.get(token).userID;
+            UserEntity user = userRepository.findById(userId).orElse(null);
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            post.setUser(user);
+            Post createdPost = postService.save(post);
+            return ResponseEntity.ok(createdPost);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping
@@ -52,6 +61,12 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable Long userId) {
+        List<Post> posts = postService.getPostsByUser(userId);
+        return ResponseEntity.ok(posts);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Post> getPostById(@PathVariable Integer id) {
         Post post = postService.getPostById(id);
@@ -63,24 +78,48 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable Integer id, @RequestBody Post post, @RequestParam Long userId) {
-        Post existingPost = postService.getPostById(id);
-        if (existingPost != null) {
-            // fixme: user should be fetched from the session. This is just for testing before implementing authentication
+    public ResponseEntity<Post> updatePost(@PathVariable Integer id,
+                                           @RequestBody Post post,
+                                           @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
+            }
             post.setUser(user);
             post.setId(id);
             Post updatedPost = postService.save(post);
             return ResponseEntity.ok(updatedPost);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePostById(@PathVariable Integer id) {
-        postService.deletePostById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletePostById(@PathVariable Integer id,
+                                               @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            long userId = SessionService.get(token).userID;
+            UserEntity user = userRepository.findById(userId).orElse(null);
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            Post post = postService.getPostById(id);
+            if (post == null || post.getUser().getId() != userId) {
+                return ResponseEntity.badRequest().build();
+            }
+            postService.deletePostById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

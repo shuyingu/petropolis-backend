@@ -10,6 +10,8 @@ import com.capstone.petropolis.error.BizException;
 import com.capstone.petropolis.repository.UserRepository;
 import com.capstone.petropolis.service.UserService;
 import com.capstone.petropolis.utils.JSON;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,7 +99,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserLoginResponse login(@RequestBody UserLoginRequest request) {
+    public UserLoginResponse login(@RequestBody UserLoginRequest request, HttpServletResponse servletResponse) {
         StopWatch watch = new StopWatch();
         UserLoginResponse response = new UserLoginResponse();
         String traceID = "";
@@ -110,6 +112,7 @@ public class UserController {
 
             traceID = response.set(request);
             this.userService.login(request, response);
+            setCookie(servletResponse, response.getToken());
         } catch (Throwable r) {
             response.setMessage(r.getMessage());
 
@@ -126,5 +129,14 @@ public class UserController {
         }
 
         return response;
+    }
+
+    private static void setCookie(HttpServletResponse servletResponse, String token) {
+        Cookie cookie = new Cookie("token", token);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        servletResponse.addCookie(cookie);
     }
 }

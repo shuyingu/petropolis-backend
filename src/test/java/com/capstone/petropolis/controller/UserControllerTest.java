@@ -53,7 +53,7 @@ class UserControllerTest {
         request.setUserName("nihao");
         request.setPassword("863CD4344612425FA488C4A51BAC2625");
 
-        UserLoginResponse response = this.userController.login(request);
+        UserLoginResponse response = this.userController.login(request, null);
         assertNotNull(response);
 
         TestHelper.dump(response);
