@@ -1,5 +1,6 @@
 package com.capstone.petropolis.controller;
 
+import com.capstone.petropolis.common.session.SessionService;
 import com.capstone.petropolis.entity.Comment;
 import com.capstone.petropolis.entity.Post;
 import com.capstone.petropolis.entity.UserEntity;
@@ -25,21 +26,29 @@ public class CommentController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@PathVariable Integer postId, @RequestBody Comment comment, @RequestParam Long userId) {
+    public ResponseEntity<Comment> createComment(@PathVariable Integer postId,
+                                                 @RequestBody Comment comment,
+                                                 @CookieValue(value = "token", required = false) String token) {
         Post post = postService.getPostById(postId);
         if (post == null) {
             return ResponseEntity.notFound().build();
         }
-        // fixme: user should be fetched from the session. This is just for testing before implementing authentication
-        UserEntity user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
+        if (token == null) {
             return ResponseEntity.badRequest().build();
         }
-
-        comment.setPost(post);
-        comment.setUser(user);
-        Comment createdComment = commentService.save(comment);
-        return ResponseEntity.ok(createdComment);
+        try {
+            long userId = SessionService.get(token).userID;
+            UserEntity user = userRepository.findById(userId).orElse(null);
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            comment.setPost(post);
+            comment.setUser(user);
+            Comment createdComment = commentService.save(comment);
+            return ResponseEntity.ok(createdComment);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping
@@ -59,14 +68,19 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Integer postId, @PathVariable Integer commentId, @RequestBody Comment comment, @RequestParam Long userId) {
+    public ResponseEntity<Comment> updateComment(@PathVariable Integer postId,
+                                                 @PathVariable Integer commentId,
+                                                 @RequestBody Comment comment,
+                                                 @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
+        }
         Post post = postService.getPostById(postId);
         if (post == null) {
             return ResponseEntity.notFound().build();
         }
-        Comment existingComment = commentService.getCommentById(commentId);
-        if (existingComment != null) {
-            // fixme: user should be fetched from the session. This is just for testing before implementing authentication
+        try {
+            long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
                 return ResponseEntity.badRequest().build();
@@ -76,19 +90,32 @@ public class CommentController {
             comment.setId(commentId);
             Comment updatedComment = commentService.save(comment);
             return ResponseEntity.ok(updatedComment);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer postId, @PathVariable Integer commentId) {
-        Comment comment = commentService.getCommentById(commentId);
-        if (comment != null) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer postId,
+                                              @PathVariable Integer commentId,
+                                              @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            long userId = SessionService.get(token).userID;
+            UserEntity user = userRepository.findById(userId).orElse(null);
+            if (user == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            Comment comment = commentService.getCommentById(commentId);
+            if (comment == null || comment.getUser().getId() != userId) {
+                return ResponseEntity.badRequest().build();
+            }
             commentService.deleteCommentById(commentId);
             return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

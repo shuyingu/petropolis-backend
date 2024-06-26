@@ -16,4 +16,7 @@ public interface PostService {
     void deletePostById(Integer id);
 
     Page<Post> getPosts(String title, String sex, String species, String postType, LocalDate dateFrom, Pageable pageable);
+
+    List<Post> getPostsByUser(Long userId);
+
 }

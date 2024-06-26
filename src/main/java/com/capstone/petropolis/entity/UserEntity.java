@@ -1,5 +1,8 @@
 package com.capstone.petropolis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -28,9 +31,11 @@ public class UserEntity implements Serializable {
     @Column(name = "user_name", nullable = false, length = 64, columnDefinition = "VARCHAR(64) COMMENT 'User Name'")
     private String userName;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, length = 32, columnDefinition = "VARCHAR(32) COMMENT 'Encrypted login password; Convention all caps; MD5(MD5(source password) + password_salt)'")
     private String password;
 
+    @JsonIgnore
     @Column(name = "password_salt", nullable = false, length = 32, columnDefinition = "VARCHAR(32) COMMENT '32 CHAR UUID; Password encrypted salt; SELECT UPPER(REPLACE(UUID(),\"-\",\"\"))'")
     private String passwordSalt;
 
