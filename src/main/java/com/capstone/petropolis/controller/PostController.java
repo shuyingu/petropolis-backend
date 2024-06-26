@@ -5,9 +5,13 @@ import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.repository.UserRepository;
 import com.capstone.petropolis.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,8 +37,18 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
-        List<Post> posts = postService.getAllPosts();
+    public ResponseEntity<Page<Post>> getPosts(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String sex,
+            @RequestParam(required = false) String species,
+            @RequestParam(required = false) String postType,
+            @RequestParam(required = false) String dateFrom,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        LocalDate fromDate = dateFrom != null ? LocalDate.parse(dateFrom) : null;
+        Page<Post> posts = postService.getPosts(title, sex, species, postType, fromDate, pageable);
         return ResponseEntity.ok(posts);
     }
 
