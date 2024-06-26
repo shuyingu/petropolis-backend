@@ -4,38 +4,35 @@ This is the backend of the project petropolis for course capstone.
 
 ## Development Guide
 
-1 **Run MySQL via Docker:**
-   
-   `docker run --name mysql -e MYSQL_ROOT_PASSWORD=petropolis -d -p 3306:3306 mysql:latest`
-  
-2 **MySQL initialize**
+### Run MySQL via Docker
 
-   step 1 : get MySQL docker container id
+Run the following command to start a MySQL container:
 
-   `docker container ls | grep mysql:latest | awk '{print $1}'`
+`docker run --name mysql -e MYSQL_ROOT_PASSWORD=petropolis -d -p 3306:3306 mysql:latest`
 
-   step 2 : open docker container bash
-   
-   `docker container exec -it {container id} /bin/bash`
+A MySQL container will be started with 3306 port exposed mapped to the host machine. So you can access the MySQL server
+directly from your host machine by running the following command:
 
-   or
+`mysql -h 127.0.0.1 -P3306 -u root -ppetropolis`
 
-   `docker container exec -it $(docker container ls | grep mysql:latest | awk '{print $1}') /bin/bash`
-   
-   step 3 : accept MySQL
+If you need to exec into the MySQL container, you can simply run the following command:
 
-   `mysql -h 127.0.0.1 -P3306 -u root -ppetropolis`
+`docker exec -it mysql bash`
 
-   step 4 ： MySQL initialize
+We are using [hibernate](https://hibernate.org/) as ORM to generate the database schema, so we don't need to create the
+database schema manually.
 
-   -> exec petropolis.user.sql create user table
+> If you do need to create the database schema manually, you can connect to the MySQL server and run the following
+commands:
+>
+> -> exec petropolis.user.sql create user table
+>
+> -> exec petropolis.prompt.sql create prompt table
 
-   -> exec petropolis.prompt.sql create prompt table
+### Run application
 
-3 **Run application:**
+`mvn spring-boot:run`
 
-   `mvn spring-boot:run`
+### Access the API documentation at
 
-4 **Access the API documentation at:**
-
-   `http://localhost:8080/swagger-ui/index.html`
+`http://localhost:8080/swagger-ui/index.html`
