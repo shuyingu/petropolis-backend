@@ -8,10 +8,8 @@ import java.util.concurrent.TimeUnit;
 public class UserSessionManage {
     public final static int UserSessionMaxExpireDay = 7;
 
-    // 默认 user session 数量有上限，超过上限我们会清理最旧的
     public final static int UserSessionMaxLength = 16;
 
-    // key : token ; value : 理论上存储 用户 UA 相关信息，例如登录时间，地点，IP，用于安全处理。这里简单写
     private Cache<String, Boolean> userSessions = CacheBuilder.newBuilder()
             .maximumSize(UserSessionMaxLength)
             .expireAfterWrite(7, TimeUnit.DAYS)

@@ -10,7 +10,6 @@ public class JSON {
 
     private final static Gson G = new Gson();
 
-    // 对象转 json 字符串
     public static String to(Object src) {
         try {
             return G.toJson(src);
@@ -18,11 +17,9 @@ public class JSON {
             log.error("JSON_to_error | r:{}, src:{}, stack:{}", r, src, ExceptionUtils.getStackTrace(r));
         }
 
-        // 默认 empty 兜底
         return "";
     }
 
-    // 从 json 串封装对象
     public static <T> T from(String json, Class<T> classOfT) {
         return G.fromJson(json, classOfT);
     }

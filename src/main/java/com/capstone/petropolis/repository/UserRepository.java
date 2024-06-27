@@ -10,12 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    // result null is not found
-    // 存在潜在 bug 用户名和邮箱重叠。 解决办法分类查询，这里为了怎么快速怎么来
     @Query(value = "SELECT * FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
     UserEntity get(String name, String email);
 
-    // result int > 1 is 已经存在重复用户 ｜ == 0 不存在重复用户
     @Query(value = "SELECT COUNT(1) FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
     int count(String name, String email);
 
@@ -36,13 +33,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "UPDATE t_user SET email_not_verified = ?2 WHERE id = ?1 AND delete_time = 0 AND email_not_verified = '' ", nativeQuery = true)
     int setEmailNotVerified(long id, String email);
 
-    // 幂等操作
     @Transactional
     @Modifying
     @Query(value = "UPDATE t_user SET user_email = email_not_verified WHERE id = ?1 AND delete_time = 0 AND email_not_verified = ?2 AND user_email <> email_not_verified", nativeQuery = true)
     int bindEmail(long id, String email);
 
-    // 幂等操作
     @Transactional
     @Modifying
     @Query(value = "UPDATE t_user SET email_not_verified = '', user_email = UPPER(REPLACE(UUID(),\"-\",\"\")) WHERE id = ?1 AND delete_time = 0 AND email_not_verified <> ''", nativeQuery = true)

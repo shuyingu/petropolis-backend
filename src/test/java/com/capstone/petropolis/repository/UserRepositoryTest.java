@@ -21,7 +21,6 @@ class UserRepositoryTest {
 
     @Test
     void get() {
-        // 1. 简单功能能否正常使用测试
         String name = "1";
         String email = "1@outlook.com";
 
@@ -75,7 +74,6 @@ class UserRepositoryTest {
 
     @Test
     void setEmailNotVerified() {
-        // 数据库基础测试数据
         // {"id":1,"UserName":"1","password":"429B010A1D164F8DAD0EE4221F546534","passwordSalt":"731295DD5BCB466E918323B9CB77209F","EmailNotVerified":"1@outlook.com","UserEmail":"029D2824277B11EFBBAF0242AC110002","UpdateTime":"Jun 10, 2024, 10:44:34 PM","CreateTime":"Jun 10, 2024, 10:44:34 PM"}
 
         long id = 1;

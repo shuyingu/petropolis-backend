@@ -29,7 +29,7 @@ public class SessionService {
     public static String put(UserSession session) throws Exception {
         long uid = session.getUserID();
 
-        // 判断 user session 是否时间过期
+        // check whether user session expire
         long currentTime = TimeUtils.currentTime();
         if (session.getCreateTime() + UserSessionManage.UserSessionMaxLength * 60 * 60 * 1000 < currentTime) {
             log.error("SessionService_put_error | session:{} expired:{}", JSON.to(session), currentTime);
@@ -38,12 +38,12 @@ public class SessionService {
 
         String token = session.encrypt();
 
-        // 第一轮校验这个人是否有过 token
+        // check whether the user have token or not
         UserSessionManage userSessionManage = sessionCache.getIfPresent(uid);
         if (userSessionManage != null) {
             userSessionManage.put(token);
         } else {
-            // 首次添加开始初始化数据
+            // add initial data
             userSessionManage = new UserSessionManage();
             userSessionManage.put(token);
             sessionCache.put(uid, userSessionManage);
@@ -54,7 +54,7 @@ public class SessionService {
 
     public static UserSession get(String token) throws Exception {
         UserSession user = UserSession.decrypt(token);
-        // 判断 token 是否时间过期
+        // check whether token expire
         long currentTime = TimeUtils.currentTime();
         if (user.getCreateTime() + UserSessionManage.UserSessionMaxLength * 60 * 60 * 1000 < currentTime) {
             log.info("SessionService_get_info | session:{} expired:{}", JSON.to(user), currentTime);
@@ -63,21 +63,20 @@ public class SessionService {
 
         long uid = user.getUserID();
 
-        // 第一轮校验这个人是否有过 token
+        // first step: check whether the user have token or not
         UserSessionManage userSessionManage = sessionCache.getIfPresent(uid);
         if (userSessionManage == null) {
             throw BizError.TokenExpire;
         }
 
-        // 第二轮 这个 token 是否被持久化保存
+        // second step: whether token be preserved consistently
         if (!userSessionManage.get(token)) {
             throw BizError.TokenExpire;
         }
 
-        // 验证通过
+        // pass
         return  user;
     }
 
-    // 这里应该提供 token 更换。 为了简单，暂时不提供了
 }
 

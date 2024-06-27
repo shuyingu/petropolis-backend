@@ -70,8 +70,6 @@ public class UserController {
         UserCreateResponse response = new UserCreateResponse();
         String traceID = "";
 
-        // 简单写写 🪀
-        // 正常走注解拦截器里统一处理
         try {
             watch.start();
             log.info("UserCreate_start_info | request:{}", JSON.to(request));
@@ -89,7 +87,6 @@ public class UserController {
                 log.error("UserCreate_BizException_error | traceID:{}, r:{}, stack:{}", traceID, r, ExceptionUtils.getStackTrace(r));
             }
 
-            // 正常企业代码 会在这里处理各类异常并打点
         } finally {
             watch.stop();
             log.info("UserCreate_finish_info | traceID:{}, elapsed:{}ms, response:{}", traceID, watch.getTotalTimeMillis(), JSON.to(response));
@@ -104,8 +101,6 @@ public class UserController {
         UserLoginResponse response = new UserLoginResponse();
         String traceID = "";
 
-        // 简单写写 🪀
-        // 正常走注解拦截器里统一处理
         try {
             watch.start();
             log.info("UserLogin_start_info | request:{}", JSON.to(request));

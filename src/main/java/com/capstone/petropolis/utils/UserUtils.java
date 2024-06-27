@@ -12,8 +12,6 @@ public class UserUtils {
             throw BizError.Empty;
         }
 
-        // 这些魔法数字 仅仅两个地方存在 当前 class 另外就是数据库兜底
-        // 其他地方不应该去使用这个魔法数字，而是直接用函数
         if (userName.length() > UserNameMaxLength) {
             throw BizError.param("user name length exceed " + UserNameMaxLength);
         }
@@ -38,7 +36,6 @@ public class UserUtils {
             throw BizError.param("user password length exceed 32");
         }
 
-        // 要求全部 32 位大写的 MD5
         for(int i = 0; i < userPassword.length(); i++){
             char ch = userPassword.charAt(i);
             if ((ch >= '0' && ch <= '9') || (ch >= 'A' &&  ch <= 'Z')) {

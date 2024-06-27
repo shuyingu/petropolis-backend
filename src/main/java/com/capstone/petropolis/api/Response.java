@@ -12,11 +12,8 @@ public class Response implements Serializable {
     @Serial
     private static final long serialVersionUID = -2062576136628466981L;
 
-    // [可选] 请求链路唯一标识码
     private String traceID;
-    // [可选] 额外信息
     private String message;
-    // [必填] 默认 0 表示 success
     private long code;
 
     public String set(Request request) {
