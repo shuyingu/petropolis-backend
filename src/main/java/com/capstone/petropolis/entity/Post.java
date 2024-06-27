@@ -31,8 +31,7 @@ public class Post {
 
     private String email;
 
-    @Lob
-    private byte[] picture;
+    private String imageURL;
 
     private String address;
 
@@ -98,14 +97,6 @@ public class Post {
         this.email = email;
     }
 
-    public byte[] getPicture() {
-        return picture;
-    }
-
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -136,5 +127,13 @@ public class Post {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }
