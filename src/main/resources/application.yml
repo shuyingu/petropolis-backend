@@ -23,3 +23,8 @@ openai:
     url: https://api.openai-proxy.org/v1/chat/completions
     key: sk-jVfmC9s3HLlOzUPCu6H7wPbtsM73as58PEnV1iYjCJgJvif9
     modelType: gpt-4o
+
+risk:
+  sensitive_words: '["hate","sex"]'
+  url: "https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key={api_key}"
+  key: "AIzaSyDbznJVVpHdUgHGc7AmUlyA-lMfzmnabWY"

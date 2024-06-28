@@ -28,8 +28,7 @@ CREATE TABLE IF NOT EXISTS `prompt_templates`
 ) NOT NULL COMMENT 'prompt code, used for search'
     ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4 COMMENT = 'prompt templates table';
 
-#
-temperately insert prompt from sql (will be replaced later)
+#temperately insert prompt from sql (will be replaced later)
 INSERT INTO prompt_templates (template, prompt_code)
 VALUES ('intent_detect',
         'Context:\n' ||
