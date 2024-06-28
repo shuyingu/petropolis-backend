@@ -21,8 +21,8 @@ public class MultiStepQAServiceImpl implements MultiStepQAService {
 
     @Override
     public String multiStepQA(List<String> historyQA, String currentQuery, String userIntent) throws InterruptedException, ExecutionException {
-        String promptTemplate1 = promptService.getTemplateByPromptCode(userIntent + "step1");
-        String promptTemplate2 = promptService.getTemplateByPromptCode(userIntent + "step2");
+        String promptTemplate1 = promptService.getTemplateByPromptCode(userIntent + "_step1");
+        String promptTemplate2 = promptService.getTemplateByPromptCode(userIntent + "_step2");
 
         String step1Prompt = buildStep1Prompt(promptTemplate1, historyQA, currentQuery);
         CompletableFuture<String> answerStep1Future = gptService.callOpenAi(step1Prompt);
@@ -62,7 +62,7 @@ public class MultiStepQAServiceImpl implements MultiStepQAService {
         String historyQAString = buildHistoryQA(historyQA);
 
         String processedPrompt = promptTemplate2.replace("HISTORYQA", historyQAString)
-                .replace("CURRENTQ", currentQuery).replace("STEP1", answerStep1);
+                .replace("CURRENTQ", currentQuery).replace("PREVIOUSRESULT", answerStep1);
 
         return processedPrompt;
     }
