@@ -14,7 +14,7 @@
     <name>petropolis</name>
     <description>petropolis</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>22</java.version>
     </properties>
 
     <dependencies>
@@ -134,16 +134,6 @@
                 <version>3.2.5</version>
                 <configuration>
                     <argLine>-XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version> <!-- 最新版本 -->
-                <configuration>
-                    <source>21</source>
-                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>
