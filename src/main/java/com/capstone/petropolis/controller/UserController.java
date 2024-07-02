@@ -4,6 +4,7 @@ import com.capstone.petropolis.api.user.UserCreateRequest;
 import com.capstone.petropolis.api.user.UserCreateResponse;
 import com.capstone.petropolis.api.user.UserLoginRequest;
 import com.capstone.petropolis.api.user.UserLoginResponse;
+import com.capstone.petropolis.common.session.SessionService;
 import com.capstone.petropolis.entity.UserEntity;
 import com.capstone.petropolis.error.BizError;
 import com.capstone.petropolis.error.BizException;
@@ -49,14 +50,19 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable long id, @RequestBody UserEntity user) {
-        UserEntity existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateUser(@RequestBody UserEntity user,
+                                        @CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
         }
-        user.setId(id);
-        UserEntity updatedUser = userRepository.save(user);
-        return ResponseEntity.ok(updatedUser);
+
+        try {
+            long userId = SessionService.get(token).userID;
+            UserEntity updatedUser = userService.update(userId, user);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

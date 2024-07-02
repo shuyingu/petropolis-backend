@@ -28,3 +28,8 @@ risk:
   sensitive_words: '["hate","sex"]'
   url: "https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key={api_key}"
   key: "AIzaSyDbznJVVpHdUgHGc7AmUlyA-lMfzmnabWY"
+
+logging:
+  level:
+    root: info
+    com.capstone.petropolis: debug

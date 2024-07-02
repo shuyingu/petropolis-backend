@@ -50,7 +50,6 @@ public class UserService {
 
         UserEntity entity = new UserEntity();
         entity.setUserName(request.getUserName());
-        entity.setUserEmail(request.getUserEmail());
         entity.setPassword(passwd);
         entity.setPasswordSalt(salt);
         entity.setEmailNotVerified(request.getUserEmail());
@@ -97,5 +96,32 @@ public class UserService {
         String token = SessionService.put(entity.getId(), request.getUserName());
 
         response.setToken(token);
+    }
+
+    public UserEntity update(long userID, UserEntity user) throws Exception {
+        if (user == null) {
+            throw BizError.Empty;
+        }
+
+        UserEntity existingUser = userRepository.findById(userID).orElse(null);
+        if (existingUser == null) {
+            throw BizError.UserNotFound;
+        }
+
+        UserUtils.checkUserName(user.getUserName());
+        UserUtils.checkUserEmail(user.getUserEmail());
+        UserUtils.checkUserPassword(user.getPassword());
+
+        String salt = IDUtils.getUpper32UUID();
+        String passwd = UserUtils.password(user.getPassword(), salt);
+
+        existingUser.setUserName(user.getUserName());
+        existingUser.setPassword(passwd);
+        existingUser.setPasswordSalt(salt);
+        existingUser.setEmailNotVerified(user.getUserEmail());
+        existingUser.setUserEmail(user.getUserEmail());
+        existingUser.setUpdateTime(new Timestamp(new Date().getTime()));
+
+        return userRepository.save(existingUser);
     }
 }
