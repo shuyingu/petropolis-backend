@@ -39,17 +39,22 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @PostMapping("")
-    public UserEntity createUser(@RequestBody UserEntity user) {
-        return userRepository.save(user);
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserById(@CookieValue(value = "token", required = false) String token) {
+        if (token == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        try {
+            long id = SessionService.get(token).userID;
+            UserEntity user = userRepository.findById(id).orElse(null);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @GetMapping("/{id}")
-    public UserEntity getUserById(@PathVariable long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    @PutMapping("/{id}")
+    @PutMapping("")
     public ResponseEntity<?> updateUser(@RequestBody UserEntity user,
                                         @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
@@ -63,11 +68,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable long id) {
-        userRepository.deleteById(id);
     }
 
     @PostMapping("/create")
