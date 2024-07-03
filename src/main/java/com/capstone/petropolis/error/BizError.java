@@ -23,4 +23,7 @@ public class BizError {
 
     public final static BizException UserPassword = BizEnum.user(4, "user and password mismatch");
 
+    public final static BizException UserNameExists = BizEnum.user(5, "user name already exists");
+
+    public final static BizException UserEmailExists = BizEnum.user(6, "user email already exists");
 }

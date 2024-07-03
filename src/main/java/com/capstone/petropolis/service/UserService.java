@@ -42,7 +42,11 @@ public class UserService {
 
         int cut = this.userRepository.count(request.getUserName(), request.getUserEmail());
         if (cut > 0) {
-            throw BizError.user("user already exists");
+            cut = this.userRepository.countName(request.getUserName());
+            if (cut > 0) {
+                throw BizError.UserNameExists;
+            }
+            throw BizError.UserEmailExists;
         }
 
         String salt = IDUtils.getUpper32UUID();

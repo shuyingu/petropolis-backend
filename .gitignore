@@ -34,3 +34,5 @@ build/
 
 ### application ###
 logs/
+
+.DS_Store

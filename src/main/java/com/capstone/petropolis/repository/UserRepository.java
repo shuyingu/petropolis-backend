@@ -16,6 +16,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "SELECT COUNT(1) FROM t_user WHERE (user_name = ?1 OR user_email = ?2) AND delete_time = 0", nativeQuery = true)
     int count(String name, String email);
 
+    @Query(value = "SELECT COUNT(1) FROM t_user WHERE (user_name = ?1) AND delete_time = 0", nativeQuery = true)
+    int countName(String name);
+
+    @Query(value = "SELECT COUNT(1) FROM t_user WHERE (user_email = ?1) AND delete_time = 0", nativeQuery = true)
+    int countEmail(String email);
+
     // inset or update result == 1 is success or result == 0 is no success or Exception
     @Transactional
     @Modifying
