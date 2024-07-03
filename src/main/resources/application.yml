@@ -1,5 +1,9 @@
 server:
-  port: 8080
+  port: 8443
+  ssl:
+      key-store: classpath:keystore.jks
+      key-store-password: petropolis
+      key-alias: tomcat
 
 spring:
   datasource:

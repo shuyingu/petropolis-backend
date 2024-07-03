@@ -137,6 +137,8 @@ public class UserController {
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * 24);
         cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setAttribute("SameSite", "None");
         servletResponse.addCookie(cookie);
     }
 }
