@@ -95,6 +95,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!--  添加webSocket支持  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
         <!-- 增加对 Log4j2 的依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
