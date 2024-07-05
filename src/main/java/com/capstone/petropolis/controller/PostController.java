@@ -78,38 +78,38 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable Integer id,
+    public ResponseEntity<?> updatePost(@PathVariable Integer id,
                                            @RequestBody Post post,
                                            @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             post.setUser(user);
             post.setId(id);
             Post updatedPost = postService.save(post);
             return ResponseEntity.ok(updatedPost);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePostById(@PathVariable Integer id,
+    public ResponseEntity<?> deletePostById(@PathVariable Integer id,
                                                @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             Post post = postService.getPostById(id);
             if (post == null || post.getUser().getId() != userId) {
@@ -118,7 +118,7 @@ public class PostController {
             postService.deletePostById(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

@@ -1,8 +1,10 @@
 package com.capstone.petropolis.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -11,12 +13,13 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Hidden
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 
     private String content;
 
-    private Date createTime;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createTime;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -27,6 +30,11 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     @Hidden
     private Post post;
+
+    @PrePersist
+    protected void onCreate() {
+        createTime = LocalDateTime.now();
+    }
 
     // Getters and Setters
     public Integer getId() {
@@ -45,11 +53,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 

@@ -26,7 +26,7 @@ public class CommentController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@PathVariable Integer postId,
+    public ResponseEntity<?> createComment(@PathVariable Integer postId,
                                                  @RequestBody Comment comment,
                                                  @CookieValue(value = "token", required = false) String token) {
         Post post = postService.getPostById(postId);
@@ -34,20 +34,20 @@ public class CommentController {
             return ResponseEntity.notFound().build();
         }
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             comment.setPost(post);
             comment.setUser(user);
             Comment createdComment = commentService.save(comment);
             return ResponseEntity.ok(createdComment);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -68,12 +68,12 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Integer postId,
+    public ResponseEntity<?> updateComment(@PathVariable Integer postId,
                                                  @PathVariable Integer commentId,
                                                  @RequestBody Comment comment,
                                                  @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         Post post = postService.getPostById(postId);
         if (post == null) {
@@ -83,7 +83,7 @@ public class CommentController {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             comment.setPost(post);
             comment.setUser(user);
@@ -91,31 +91,31 @@ public class CommentController {
             Comment updatedComment = commentService.save(comment);
             return ResponseEntity.ok(updatedComment);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer postId,
+    public ResponseEntity<?> deleteComment(@PathVariable Integer postId,
                                               @PathVariable Integer commentId,
                                               @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             Comment comment = commentService.getCommentById(commentId);
             if (comment == null || comment.getUser().getId() != userId) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("Comment not found.");
             }
             commentService.deleteCommentById(commentId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

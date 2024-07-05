@@ -1,9 +1,11 @@
 package com.capstone.petropolis.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -12,7 +14,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Hidden
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer id;
 
     // which is pet's name
@@ -35,7 +37,8 @@ public class Post {
 
     private String address;
 
-    private Date createTime;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createTime;
 
     private LocalDate lostDate;
 
@@ -43,6 +46,11 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     @Hidden
     private UserEntity user;
+
+    @PrePersist
+    protected void onCreate() {
+        createTime = LocalDateTime.now();
+    }
 
     // Getters and Setters
     public Integer getId() {
@@ -105,11 +113,11 @@ public class Post {
         this.address = address;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 
