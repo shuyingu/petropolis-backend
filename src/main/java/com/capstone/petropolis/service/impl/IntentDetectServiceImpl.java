@@ -52,12 +52,17 @@ public class IntentDetectServiceImpl implements IntentDetectService {
 
     private boolean validateIntent(String result) {
         // TODO: Design Intent type
+        int cnt = 0;
         String[] validResults = {"choose pet", "pet information", "pet care", "others"};
+
         for (String validResult : validResults) {
-            if (result.toLowerCase().equals(validResult)) {
-                return true;
+            if (result.contains(validResult)) {
+                cnt++;
+            }
+            if (cnt > 1) {
+                return false;  // More than one valid result found
             }
         }
-        return false;
+        return cnt == 1;
     }
 }

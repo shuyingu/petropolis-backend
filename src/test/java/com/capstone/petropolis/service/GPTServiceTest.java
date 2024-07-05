@@ -1,6 +1,5 @@
-package com.capstone.petropolis.service.chat;
+package com.capstone.petropolis.service;
 
-import com.capstone.petropolis.service.GPTService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +21,7 @@ public class GPTServiceTest {
     public void testCallGPT() throws ExecutionException, InterruptedException {
         CompletableFuture<String> futureResponse = gptService.callOpenAi("Hello, world!");
         String response = futureResponse.get();
+        System.out.println(response);
         assertNotNull(response);
     }
 }

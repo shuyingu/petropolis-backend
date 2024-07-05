@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PromptTemplateRepository extends JpaRepository<PromptTemplate, Long> {
-    @Query(value = "SELECT template FROM prompt_templates WHERE prompt_code = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM prompt_templates WHERE prompt_code = ?1", nativeQuery = true)
     PromptTemplate getTemplate(String promptCode);
 }

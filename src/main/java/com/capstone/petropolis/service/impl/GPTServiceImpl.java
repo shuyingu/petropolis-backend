@@ -27,9 +27,18 @@ public class GPTServiceImpl implements GPTService {
     @Override
     @Async
     public CompletableFuture<String> callOpenAi(String prompt) {
+        JSONObject json = new JSONObject();
+        json.put("model", modelType);
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonEnt = new JSONObject();
+        jsonEnt.put("role","user");
+        jsonEnt.put("content", prompt);
+        jsonArray.put(jsonEnt);
+        json.put("messages", jsonArray);
+
         RequestBody body = RequestBody.create(
                 MediaType.parse("application/json"),
-                "{\"model\": \"" + modelType + "\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}"
+                json.toString()
         );
 
         Request request = new Request.Builder()
@@ -44,7 +53,7 @@ public class GPTServiceImpl implements GPTService {
             if (response.isSuccessful() && response.body() != null) {
                 return CompletableFuture.completedFuture(parseResponseContent(response.body().string()));
             } else {
-                return CompletableFuture.completedFuture("Error: " + response.message());
+                return CompletableFuture.completedFuture("Error: " + response.message() + json.toString());
             }
         } catch (IOException e) {
             return CompletableFuture.completedFuture("Error: " + e.getMessage());
