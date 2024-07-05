@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class IntentDetectServiceImpl implements IntentDetectService {
@@ -19,18 +21,18 @@ public class IntentDetectServiceImpl implements IntentDetectService {
     private GPTService gptService;
 
     @Override
-    public String detectIntent(List<String> historyQA, String currentQuery) {
+    public String detectIntent(List<String> historyQA, String currentQuery) throws Exception {
         PromptTemplate promptTemplate = promptTemplateRepository.getTemplate("intent_detect");
 
         String fullPrompt = buildPrompt(promptTemplate.getTemplate(), historyQA, currentQuery);
 
-        String gptResponse = gptService.callOpenAi(fullPrompt).join();
+        CompletableFuture<String> gptResponseFuture = gptService.callOpenAi(fullPrompt);
 
-        if (validateIntent(gptResponse)) {
-            return gptResponse;
-        } else {
-            return "Server Error, Please try again";
-        }
+        String gptResponse;
+
+        gptResponse = gptResponseFuture.get(30, TimeUnit.SECONDS);
+
+        return validateIntent(gptResponse);
     }
 
     private String buildPrompt(String template, List<String> historyQA, String currentQuery) {
@@ -50,19 +52,27 @@ public class IntentDetectServiceImpl implements IntentDetectService {
         return processedPrompt;
     }
 
-    private boolean validateIntent(String result) {
+    private String validateIntent(String result) {
         // TODO: Design Intent type
+        String validateString = "others";
         int cnt = 0;
         String[] validResults = {"choose pet", "pet information", "pet care", "others"};
 
         for (String validResult : validResults) {
             if (result.contains(validResult)) {
                 cnt++;
+                validateString = validResult;
             }
             if (cnt > 1) {
-                return false;  // More than one valid result found
+                return "others";  // More than one valid result found
             }
         }
-        return cnt == 1;
+        if (cnt == 1) {
+            validateString = String.join("_",validateString.split(" "));
+            return validateString;
+        }
+        else {
+            return "others";
+        }
     }
 }
