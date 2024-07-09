@@ -15,5 +15,7 @@ public class UserCreateRequest extends Request {
 
     private String userName;
     private String userEmail;
+
+    // [required] MD5(user password).upper() 32 size upper A-Z + 0-9
     private String password;
 }

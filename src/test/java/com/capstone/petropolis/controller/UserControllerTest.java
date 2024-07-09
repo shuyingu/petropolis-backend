@@ -36,7 +36,7 @@ class UserControllerTest {
     @Test
     void create() {
         UserCreateRequest request = new UserCreateRequest();
-        request.setUserName("nihao5");
+        request.setUserName("nihao4g");
         // request.setPassword(IDUtils.getUpper32UUID());
         request.setPassword("863CD4344612425FA488C4A51BAC2625");
         request.setUserEmail("nihao@gmailcom4");

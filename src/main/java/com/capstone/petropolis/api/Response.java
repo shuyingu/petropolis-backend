@@ -14,6 +14,8 @@ public class Response implements Serializable {
 
     private String traceID;
     private String message;
+
+    // [required] 0 or 2xx is success code not 0 && not 2xx is error code
     private long code;
 
     public String set(Request request) {
