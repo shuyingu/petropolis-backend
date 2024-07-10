@@ -26,22 +26,22 @@ public class PostController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post,
+    public ResponseEntity<?> createPost(@RequestBody Post post,
                                            @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
             if (user == null) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body("User not found.");
             }
             post.setUser(user);
             Post createdPost = postService.save(post);
             return ResponseEntity.ok(createdPost);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

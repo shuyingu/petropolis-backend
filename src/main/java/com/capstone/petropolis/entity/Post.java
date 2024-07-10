@@ -1,5 +1,6 @@
 package com.capstone.petropolis.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
@@ -7,6 +8,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "post")
@@ -46,6 +48,11 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     @Hidden
     private UserEntity user;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @Hidden
+    private List<Comment> comments;
 
     @PrePersist
     protected void onCreate() {
@@ -143,5 +150,13 @@ public class Post {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
