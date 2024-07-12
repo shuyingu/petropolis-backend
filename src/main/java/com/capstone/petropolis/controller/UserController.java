@@ -42,7 +42,7 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<?> getUserById(@CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
 
         try {
@@ -58,7 +58,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@RequestBody UserEntity user,
                                         @CookieValue(value = "token", required = false) String token) {
         if (token == null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("No token provided.");
         }
 
         try {
