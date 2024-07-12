@@ -26,14 +26,7 @@ public class ChatMessage {
 
     private Date createTime;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @Hidden
-    private UserEntity user;
-
     private boolean isAnswer;
-
-    private boolean isQuery;
 
     @ElementCollection
     @CollectionTable(name = "history_qa", joinColumns = @JoinColumn(name = "chat_message_id"))

@@ -42,9 +42,7 @@ public class ChatController {
             response.setChatId(request.getChatId());
             response.setSessionId(request.getSessionId());
             response.setCreateTime(new Date());
-            response.setUser(request.getUser());
             response.setAnswer(true);
-            response.setQuery(false);
 
             historyQA.add(query);
             response.setHistoryQA(historyQA);
@@ -82,19 +80,29 @@ public class ChatController {
             historyQA = new ArrayList<>();
         }
         try {
-            String intent = intentDetectService.detectIntent(historyQA, request.getContent());
-            String answerContent = multiStepQAService.multiStepQA(historyQA, request.getContent(), intent);
-            boolean haveRisk = riskDetectService.keywordRiskDetect(answerContent);
+            String query = request.getContent();
 
             ChatMessage response = new ChatMessage();
             response.setChatId(request.getChatId());
             response.setSessionId(request.getSessionId());
             response.setCreateTime(new Date());
-            response.setUser(request.getUser());
             response.setAnswer(true);
-            response.setQuery(false);
+
+            historyQA.add(query);
             response.setHistoryQA(historyQA);
 
+            // Intent Detection
+            String intent = intentDetectService.detectIntent(historyQA, query);
+            if (intent.equals("others")) {
+                response.setContent("Please refresh your chatbox and answer a question related to pet selection or pet information.\n");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+
+            // MultistepQA
+            String answerContent = multiStepQAService.multiStepQA(historyQA, query, intent);
+
+            // RiskDetection
+            boolean haveRisk = riskDetectService.keywordRiskDetect(answerContent);
             if (haveRisk) {
                 response.setContent("Wrong query");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
