@@ -4,6 +4,8 @@ DATABASE IF NOT EXISTS `petropolis` CHARACTER SET UTF8MB4;
 USE
 petropolis;
 
+drop table if exists `prompt_templates`;
+
 CREATE TABLE IF NOT EXISTS `prompt_templates`
 (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Primary key, prompt id',
