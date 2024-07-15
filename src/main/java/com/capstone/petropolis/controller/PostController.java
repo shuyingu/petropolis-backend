@@ -87,12 +87,30 @@ public class PostController {
         try {
             long userId = SessionService.get(token).userID;
             UserEntity user = userRepository.findById(userId).orElse(null);
+
             if (user == null) {
                 return ResponseEntity.badRequest().body("User not found.");
             }
-            post.setUser(user);
-            post.setId(id);
-            Post updatedPost = postService.save(post);
+
+            Post existingPost = postService.getPostById(id);
+
+            if (existingPost == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            if (userId != existingPost.getUser().getId()) {
+                return ResponseEntity.badRequest().body("Trying to update post created by another user");
+            }
+
+            existingPost.setTitle(post.getTitle());
+            existingPost.setSex(post.getSex());
+            existingPost.setSpecies(post.getSpecies());
+            existingPost.setContent(post.getContent());
+            existingPost.setPostType(post.getPostType());
+            existingPost.setImageURL(post.getImageURL());
+            existingPost.setLostDate(post.getLostDate());
+
+            Post updatedPost = postService.save(existingPost);
             return ResponseEntity.ok(updatedPost);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

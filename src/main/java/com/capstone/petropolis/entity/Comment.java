@@ -22,6 +22,9 @@ public class Comment {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime updateTime;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @Hidden
@@ -36,6 +39,11 @@ public class Comment {
     @PrePersist
     protected void onCreate() {
         createTime = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateTime = LocalDateTime.now();
     }
 
     // Getters and Setters

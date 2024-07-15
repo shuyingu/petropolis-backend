@@ -85,10 +85,19 @@ public class CommentController {
             if (user == null) {
                 return ResponseEntity.badRequest().body("User not found.");
             }
-            comment.setPost(post);
-            comment.setUser(user);
-            comment.setId(commentId);
-            Comment updatedComment = commentService.save(comment);
+
+            Comment existingComment = commentService.getCommentById(commentId);
+            if (existingComment == null) {
+                return ResponseEntity.badRequest().body("Comment not found.");
+            }
+
+            if (existingComment.getUser().getId() != userId) {
+                return ResponseEntity.badRequest().body("User not authorized.");
+            }
+
+            existingComment.setContent(comment.getContent());
+
+            Comment updatedComment = commentService.save(existingComment);
             return ResponseEntity.ok(updatedComment);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

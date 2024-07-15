@@ -42,6 +42,9 @@ public class Post {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createTime;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime updateTime;
+
     private LocalDate lostDate;
 
     @ManyToOne
@@ -57,6 +60,11 @@ public class Post {
     @PrePersist
     protected void onCreate() {
         createTime = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateTime = LocalDateTime.now();
     }
 
     // Getters and Setters
@@ -158,5 +166,9 @@ public class Post {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public void setPostType(PostType postType) {
+        this.postType = postType;
     }
 }
