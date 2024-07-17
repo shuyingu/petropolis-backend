@@ -2,6 +2,24 @@
 
 This is the backend of the project petropolis for course capstone.
 
+## Local Deployment
+
+### Run MySQL via Docker
+
+Run the following command to start a MySQL container:
+
+`docker run --name mysql -e MYSQL_ROOT_PASSWORD=petropolis -d -p 3306:3306 mysql:latest`
+
+### Run the application via Docker
+
+Run the following command to start the application container:
+
+`docker run -d -p 8443:8443 -e SPRING_DATASOURCE_URL="jdbc:mysql://host.docker.internal:3306/petropolis?createDatabaseIfNotExist=true&characterEncoding=utf-8" -v {path_to_your_image_folder}:/app/src/main/resources/tmp sherryu/petropolis`
+
+### Access the API documentation at
+
+`https://localhost:8443/swagger-ui/index.html`
+
 ## Development Guide
 
 ### Run MySQL via Docker
