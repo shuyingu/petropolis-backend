@@ -10,15 +10,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
+    private static final Logger log = LogManager.getLogger();
 
     @Autowired
     private IntentDetectService intentDetectService;
@@ -31,6 +33,7 @@ public class ChatController {
 
     @PostMapping("/chat")
     public ResponseEntity<?> chat(@RequestBody ChatMessage request) {
+        log.info(request.toString());
         List<String> historyQA = request.getHistoryQA();
         if (historyQA == null) {
             historyQA = new ArrayList<>();
@@ -39,9 +42,7 @@ public class ChatController {
             String query = request.getContent();
 
             ChatMessage response = new ChatMessage();
-            response.setChatId(request.getChatId());
-            response.setSessionId(request.getSessionId());
-            response.setCreateTime(new Date());
+            response.setChatId(String.valueOf(System.currentTimeMillis()));
             response.setAnswer(true);
 
             historyQA.add(query);
@@ -67,7 +68,12 @@ public class ChatController {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
+        } catch (TimeoutException te) {
+            return ResponseEntity.badRequest().body("Timeout, please retry or refresh the chatbox.");
         } catch (Exception e) {
+            if (e.getMessage().contains("timeout")) {
+                return ResponseEntity.badRequest().body("Timeout, please retry or refresh the chatbox.");
+            }
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -75,6 +81,7 @@ public class ChatController {
     @MessageMapping("/chat-websocket")
     @SendTo("/topic/chat")
     public ResponseEntity<?> chatWebSocket(ChatMessage request) {
+        log.info(request.toString());
         List<String> historyQA = request.getHistoryQA();
         if (historyQA == null) {
             historyQA = new ArrayList<>();
@@ -83,9 +90,7 @@ public class ChatController {
             String query = request.getContent();
 
             ChatMessage response = new ChatMessage();
-            response.setChatId(request.getChatId());
-            response.setSessionId(request.getSessionId());
-            response.setCreateTime(new Date());
+            response.setChatId(String.valueOf(System.currentTimeMillis()));
             response.setAnswer(true);
 
             historyQA.add(query);

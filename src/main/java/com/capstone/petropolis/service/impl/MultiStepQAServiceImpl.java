@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class MultiStepQAServiceImpl implements MultiStepQAService {
@@ -20,17 +21,17 @@ public class MultiStepQAServiceImpl implements MultiStepQAService {
     private GPTService gptService;
 
     @Override
-    public String multiStepQA(List<String> historyQA, String currentQuery, String userIntent) throws InterruptedException, ExecutionException {
+    public String multiStepQA(List<String> historyQA, String currentQuery, String userIntent) throws Exception {
         String promptTemplate1 = promptService.getTemplateByPromptCode(userIntent + "_step1");
         String promptTemplate2 = promptService.getTemplateByPromptCode(userIntent + "_step2");
 
         String step1Prompt = buildStep1Prompt(promptTemplate1, historyQA, currentQuery);
         CompletableFuture<String> answerStep1Future = gptService.callOpenAi(step1Prompt);
-        String answerStep1 = answerStep1Future.get();
+        String answerStep1 = answerStep1Future.get(30, TimeUnit.SECONDS);
 
         String step2Prompt = buildStep2Prompt(promptTemplate2, historyQA, currentQuery, answerStep1);
         CompletableFuture<String> answerStep2Future = gptService.callOpenAi(step2Prompt);
-        String finalAnswer = answerStep2Future.get();
+        String finalAnswer = answerStep2Future.get(30, TimeUnit.SECONDS);
 
         return finalAnswer;
     }

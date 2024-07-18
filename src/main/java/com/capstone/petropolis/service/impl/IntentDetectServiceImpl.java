@@ -53,7 +53,6 @@ public class IntentDetectServiceImpl implements IntentDetectService {
     }
 
     private String validateIntent(String result) {
-        // TODO: Design Intent type
         String validateString = "others";
         int cnt = 0;
         String[] validResults = {"choose pet", "pet information", "pet care", "others"};
