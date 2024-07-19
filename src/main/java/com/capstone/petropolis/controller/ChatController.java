@@ -116,7 +116,20 @@ public class ChatController {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
 
+        } catch (TimeoutException te) {
+            ChatMessage response = new ChatMessage();
+            response.setChatId(String.valueOf(System.currentTimeMillis()));
+            response.setAnswer(true);
+            response.setContent("Timeout, please retry or refresh the chatbox.");
+            return ResponseEntity.badRequest().body(response);
         } catch (Exception e) {
+            if (e.getMessage().contains("timeout")) {
+                ChatMessage response = new ChatMessage();
+                response.setChatId(String.valueOf(System.currentTimeMillis()));
+                response.setAnswer(true);
+                response.setContent("Timeout, please retry or refresh the chatbox.");
+                return ResponseEntity.badRequest().body(response);
+            }
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -10,13 +10,18 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.CompletableFuture;
 
 @Service
 @EnableAsync
 public class GPTServiceImpl implements GPTService {
 
-    private final OkHttpClient httpClient = new OkHttpClient();
+    private final OkHttpClient httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build();;
     @Value("${openai.api.key}")
     private String apiKey;
     @Value("${openai.api.url}")
@@ -26,7 +31,7 @@ public class GPTServiceImpl implements GPTService {
 
     @Override
     @Async
-    public CompletableFuture<String> callOpenAi(String prompt) {
+    public CompletableFuture<String> callOpenAi(String prompt) throws Exception{
         JSONObject json = new JSONObject();
         json.put("model", modelType);
         JSONArray jsonArray = new JSONArray();
@@ -49,15 +54,18 @@ public class GPTServiceImpl implements GPTService {
 
         Call call = httpClient.newCall(request);
 
-        try (Response response = call.execute()) {
-            if (response.isSuccessful() && response.body() != null) {
-                return CompletableFuture.completedFuture(parseResponseContent(response.body().string()));
-            } else {
-                return CompletableFuture.completedFuture("Error: " + response.message() + json.toString());
-            }
-        } catch (IOException e) {
-            return CompletableFuture.completedFuture("Error: " + e.getMessage());
-        }
+        Response response = call.execute();
+
+        return CompletableFuture.completedFuture(parseResponseContent(response.body().string()));
+//        try (Response response = call.execute()) {
+//            if (response.isSuccessful() && response.body() != null) {
+//                return CompletableFuture.completedFuture(parseResponseContent(response.body().string()));
+//            } else {
+//                return CompletableFuture.completedFuture("Error: " + response.message() + json.toString());
+//            }
+//        } catch (IOException e) {
+//            return CompletableFuture.completedFuture("Error: " + e.getMessage());
+//        }
     }
 
     private String parseResponseContent(String responseBody) {

@@ -18,7 +18,7 @@ public class GPTServiceTest {
     private GPTService gptService;
 
     @Test
-    public void testCallGPT() throws ExecutionException, InterruptedException {
+    public void testCallGPT() throws Exception {
         CompletableFuture<String> futureResponse = gptService.callOpenAi("Hello, world!");
         String response = futureResponse.get();
         System.out.println(response);

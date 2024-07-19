@@ -42,6 +42,7 @@ VALUES (
                 '1. Focus on the topic of pet selection.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is helpful and supportive.\n',
+                '4. The response should be no longer than 100 words.\n',
                 'Task: Based on the above context and current query, identify the necessary knowledge for choosing a pet. Assess if additional information from the user is needed for a more precise pet recommendation. If yes, specify the additional information required.'
         ),'choose_pet_step1'
        );
@@ -57,6 +58,7 @@ VALUES (
                 '1. Focus on the topic of pet selection.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is helpful and supportive.\n',
+                '4. The response should be no longer than 200 words.\n',
                 'Task: Based on the context, current query, and the previous prompt result, recommend three pet breeds most suitable according to the current information. If more information is needed, ask the user for the specific additional information required.'
         ), 'choose_pet_step2'
        );
@@ -71,6 +73,7 @@ VALUES (
                 '1. Focus on the topic of providing specific pet details.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is informative and supportive.\n',
+                '4. The response should be no longer than 100 words.\n',
                 'Task: Based on the above context and current query, provide the requested details about the particular type of pet. Assess if additional details from the user are needed for more accurate information. If yes, specify the additional details required.'
         ), 'pet_information_step1'
        );
@@ -86,6 +89,7 @@ VALUES (
                 '1. Focus on the topic of providing specific pet details.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is informative and supportive.\n',
+                '4. The response should be no longer than 200 words.\n',
                 'Task: Based on the context, current query, and the previous prompt result, provide the specific details about the pet requested by the user. If more details are needed, ask the user for the specific additional information required.'
         ), 'pet_information_step2'
        );
@@ -100,6 +104,7 @@ VALUES (
                 '1. Focus on the topic of providing pet care information.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is informative and supportive.\n',
+                '4. The response should be no longer than 100 words.\n',
                 'Task: Based on the above context and current query, provide the necessary information on how to care for the specific type of pet. Assess if additional details from the user are needed for more accurate care information. If yes, specify the additional details required.'
         ), 'pet_care_step1'
        );
@@ -115,6 +120,7 @@ VALUES (
                 '1. Focus on the topic of providing pet care information.\n',
                 '2. Avoid generating any discriminatory, negative, or toxic content.\n',
                 '3. Ensure the response is informative and supportive.\n',
+                '4. The response should be no longer than 200 words.\n',
                 'Task: Based on the context, current query, and the previous prompt result, provide the necessary information on how to care for the specific type of pet. If more details are needed, ask the user for the specific additional information required.'
         ), 'pet_care_step2'
        );
