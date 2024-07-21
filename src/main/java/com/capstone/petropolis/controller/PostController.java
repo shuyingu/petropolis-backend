@@ -109,6 +109,8 @@ public class PostController {
             existingPost.setPostType(post.getPostType());
             existingPost.setImageURL(post.getImageURL());
             existingPost.setLostDate(post.getLostDate());
+            existingPost.setAddress(post.getAddress());
+            existingPost.setEmail(post.getEmail());
 
             Post updatedPost = postService.save(existingPost);
             return ResponseEntity.ok(updatedPost);
